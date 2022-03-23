@@ -2,7 +2,9 @@
      
      import java.util.ArrayList;
      import java.util.List;
-     import net.minecraft.client.Minecraft;
+
+import de.dafeist.ucaddons.utils.Utils;
+import net.minecraft.client.Minecraft;
      import net.minecraft.command.CommandBase;
      import net.minecraft.command.ICommand;
      import net.minecraft.command.ICommandSender;
@@ -28,7 +30,11 @@
      
        
        public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-       (Minecraft.getMinecraft()).player.sendChatMessage("/reinforcement");
+           if(Utils.UCUtilsActivated && args.length == 1) {
+        	   Minecraft.getMinecraft().player.sendChatMessage("/reinforcement " + args[0]);
+           } else {
+       Minecraft.getMinecraft().player.sendChatMessage("/reinforcement");
+           }
        }
      
        

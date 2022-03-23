@@ -11,6 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import de.dafeist.ucaddons.CarUtils;
+import de.dafeist.ucaddons.CertFix;
 import de.dafeist.ucaddons.UCAddons;
 import de.dafeist.ucaddons.utils.Logger;
 import de.dafeist.ucaddons.utils.UCAddonsUpdater;
@@ -35,6 +36,7 @@ public class ControlPanel extends Thread {
 		 formData.put("password", password);
 		 System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 		 Connection.Response homePage = Jsoup.connect(loginActionUrl)
+				 .sslSocketFactory(CertFix.socketFactory())
 				 .validateTLSCertificates(false)
 				 .ignoreHttpErrors(true)
 		         .cookies(cookies)  
@@ -44,6 +46,7 @@ public class ControlPanel extends Thread {
 		         .execute(); 
 		 Map<String, String> cks = homePage.cookies();
 		 Connection.Response profilePage = Jsoup.connect(profileURL)
+				 .sslSocketFactory(CertFix.socketFactory())
 				 .validateTLSCertificates(false)
 				 .cookies(cks)
 				 .data(formData)
@@ -66,20 +69,21 @@ public class ControlPanel extends Thread {
 			Thirst = Thirst.replace("Durst ", "");
 			Utils.Thirst = Thirst;
 			String BimborginiTank = html.selectFirst("p:containsOwn(/100l)").parent().children().text();
-			if(Double.parseDouble(BimborginiTank.replace("/100l", "").replace("l", "")) <= 5) {
+			if(Double.parseDouble(BimborginiTank.replace("/100l", "").replace("l", "")) <= 5 ) {
 				CarUtils.lockTank = true;
 				Minecraft.getMinecraft().player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " Du hast nurnoch " + BimborginiTank + " Tank"));
+				Logger.LOGGER.info("Tank low");
 			} else if(Double.parseDouble(BimborginiTank.replace("/100l", "").replace("l", "")) > 50) {
 				CarUtils.lockTank = false;
 			}
 			
-			if(Utils.PayDayTime == "55/60 min") {
+			if(Utils.PayDayTime == "55/60 min" || Utils.PayDayTime.contains("55")) { 
+				Logger.LOGGER.info("PayDay in 5 minutes");
 				Minecraft.getMinecraft().player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " 5 Minuten noch bis zum PayDay!"));
 			}
 			
 		 }
 		} catch(Exception e) {
-			e.printStackTrace();
 		}
 		try {
 			if(Utils.lockUpdater == false) {
@@ -87,6 +91,7 @@ public class ControlPanel extends Thread {
 			 final String USER_AGENT = "Mozilla/5.0";
 			 System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 			 Connection.Response Page = Jsoup.connect("https://dafeist.de/UCAddonsVersionCheck.php")
+					 .sslSocketFactory(CertFix.socketFactory())
 					 .ignoreHttpErrors(true)
 			         .method(Connection.Method.POST)  
 			         .userAgent(USER_AGENT)  

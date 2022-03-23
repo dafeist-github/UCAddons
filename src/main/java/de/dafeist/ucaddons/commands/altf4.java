@@ -10,8 +10,7 @@
      import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
     
-     public class altf4 extends CommandBase
-     {
+     public class altf4 extends CommandBase {
        public String getCommandName() {
        return "altf4";
        }

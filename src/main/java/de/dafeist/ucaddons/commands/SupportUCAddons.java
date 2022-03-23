@@ -34,7 +34,7 @@ import net.minecraft.client.Minecraft;
      
        
        public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-       (Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " Für Spenden(PaySafeCard, PayPal) wende dich bitte über Discord an DaFeist#7628. Um zu spenden könnt ihr auch Bitcoin an die Adresse bc1qs5k4er47g0gqkkmjykd0cqq2qw5cvwvm0cusjg senden"));
+       (Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " Für Spenden(PaySafeCard, PayPal) wende dich bitte über Instagram-DM an dafeist_gaming oder zur Not im Forum an DaFeist"));
        }
      
        

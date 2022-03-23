@@ -2,6 +2,7 @@
      
      import com.google.gson.stream.JsonReader;
 
+import de.dafeist.ucaddons.ConfigHandler;
 import de.dafeist.ucaddons.UCAddons;
 
 import java.io.File;
@@ -22,12 +23,10 @@ import java.io.File;
            String Z = String.valueOf((Minecraft.getMinecraft()).player.getPosition().getZ());
            String LF = FileUtils.readFileToString(file);
            if (LF.contains("X" + X) && LF.contains("Y" + Y) && LF.contains("Z" + Z)) {
-             Configuration config = UCAddons.config;
-             config.load();
-             if (config.getBoolean("showHKasse", "house", false, "Zeigt die HKasse an wenn ein Haus registriert ist") == true) {
+             if (ConfigHandler.showHKasse == true) {
                (Minecraft.getMinecraft()).player.sendChatMessage("/hkasse");
                }
-             if (config.getBoolean("showDrugLager", "house", false, "Zeigt das DrugLager an wenn ein Haus registriert ist") == true) {
+             if (ConfigHandler.showDrugLager == true) {
                (Minecraft.getMinecraft()).player.sendChatMessage("/drogenlager");
                }
              Thread.sleep(30000L);

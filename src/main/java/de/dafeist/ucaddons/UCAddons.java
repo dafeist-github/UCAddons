@@ -22,7 +22,9 @@ import de.dafeist.ucaddons.utils.Utils;
 import net.minecraft.client.Minecraft;
        import net.minecraft.client.tutorial.TutorialSteps;
        import net.minecraftforge.common.MinecraftForge;
-       import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.config.Configuration;
        import net.minecraftforge.fml.common.Loader;
        import net.minecraftforge.fml.common.Mod;
        import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -32,14 +34,12 @@ import net.minecraft.client.Minecraft;
        import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import scala.Int;
        
-       @Mod(modid = "ucaddons", name = "UCAddons", version = "1.0.6", clientSideOnly = true, acceptedMinecraftVersions = "[1.12.2]")
+       @Mod(modid = "ucaddons", name = "UCAddons", version = "1.0.10", clientSideOnly = true, acceptedMinecraftVersions = "[1.12.2]")
        public class UCAddons {
        public static boolean FirstServerJoin = true;
        public static final String MODID = "ucaddons";
        public static final String NAME = "UCAddons";
-       public static final String VERSION = "1.0.6";
-       public static HashMap<Int, ArrayList> houseCoordsMap = new HashMap<Int, ArrayList>();
-       public static ArrayList house1 = new ArrayList();
+       public static final String VERSION = "1.0.10";
        public static Configuration config;
        
        @Instance
@@ -53,8 +53,7 @@ import scala.Int;
        public void preinit(FMLPreInitializationEvent event) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException {
        Logger.LOGGER.info("Started UCAddons preinit");
        Logger.LOGGER.info("Loading Config");
-       config = new Configuration(event.getSuggestedConfigurationFile());
-       ConfigHandler.init(config);
+       ConfigManager.sync(MODID, Config.Type.INSTANCE);
        ControlPanelUtils.init();
        MedicUtils.init();
        FactionUtils.init();

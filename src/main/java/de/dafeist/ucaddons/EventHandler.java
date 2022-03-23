@@ -44,7 +44,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
         	}
         }
         
-        
         @SubscribeEvent
         public void onMessageSend(ClientChatEvent event) throws IOException {
         	if(event.getMessage().equalsIgnoreCase("/tazer") && Utils.TazerEnabled == false && FactionUtils.isCopOrFBI == true) {
@@ -65,13 +64,49 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
         
         @SubscribeEvent
         public void onServerLoginEvent(EntityJoinWorldEvent event) {
+            if (UCAddons.FirstServerJoin == true) {
  	        Logger.LOGGER.info("Checking for Updates...");
+ 	        try {
+ 				 Logger.LOGGER.info("Searching for UCAddons Updates...");
+ 				 final String USER_AGENT = "Mozilla/5.0";
+ 				 System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+ 				 Connection.Response Page = Jsoup.connect("https://dafeist.de/UCAddonsVersionCheck.php")
+ 						 .sslSocketFactory(CertFix.socketFactory())
+ 						 .ignoreHttpErrors(true)
+ 				         .method(Connection.Method.POST)  
+ 				         .userAgent(USER_AGENT)  
+ 				         .execute(); 
+ 				Document html = Page.parse();
+ 				String latestVersionString = html.selectFirst("body").parent().children().text();
+ 				String currentVersionString = UCAddons.VERSION;
+ 				latestVersionString = latestVersionString.replace(".", "");
+ 				currentVersionString = currentVersionString.replace(".", "");
+ 				int latestVersion = Integer.parseInt(latestVersionString);
+ 				int currentVersion = Integer.parseInt(currentVersionString);
+ 				if(latestVersion > currentVersion) {
+ 					Logger.LOGGER.info("UCAddons Update found, downloading Update...");
+ 					Connection.Response Page2 = Jsoup.connect("https://dafeist.de/ucaddonschangelog.php")
+							 .sslSocketFactory(CertFix.socketFactory())
+	 						 .ignoreHttpErrors(true)
+	 				         .method(Connection.Method.POST)  
+	 				         .userAgent(USER_AGENT)  
+	 				         .execute(); 
+	 				Document html2 = Page2.parse();
+	 				String changelog = html2.text();
+					(Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + changelog));
+ 					UCAddonsUpdater.update();
+ 					Utils.lockUpdater = true;
+ 				} else {
+ 					Logger.LOGGER.info("UCAddons is already up to date, latest version: " + latestVersionString);
+ 				}
+ 	       } catch(Exception e) {
+ 	    	   e.printStackTrace();
+ 	       }
+ 				
         	try {
-       if (UCAddons.FirstServerJoin == true) {
                UCAddons.FirstServerJoin = false;
 	         ServerListener serverListener = new ServerListener();
 	 	        serverListener.start();
-          } 
  	     Minecraft.getMinecraft().getTutorial().setStep(TutorialSteps.NONE);
 	      if (Minecraft.getMinecraft().isSingleplayer()) {
             return;
@@ -84,24 +119,24 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 	        } else {
             Utils.onUnicaCity = false;
             } 
- 	      if (Utils.onUnicaCity = true) {
- 	         Configuration config = UCAddons.config;
- 	        if (config.getBoolean("cordChecker", "house", false, "Nur aktivieren wenn du einen der oberen Punkte brauchst") == true && Utils.onUnicaCity == true) {
+ 	      if (Utils.onUnicaCity == true) {
+ 	        if (ConfigHandler.cordChecker == true) {
  	          POSChecker pOSChecker = new POSChecker();
  	          pOSChecker.start();
               } 
  	      } 
-          } 
+	     }
         	} catch(Exception e) {
 	        	e.printStackTrace();
 	        }
-        	
+            }
         }
+        
         
         @SubscribeEvent
         public void NameFormatEvent(PlayerEvent.NameFormat event) {
         	if(event.getEntity().getName().contains("DaFeist")) {
-        		event.setDisplayname("§6[§4UCAddons§6]§2 DaFeist");
+        		//event.setDisplayname("§6[§4UCAddons§6]§2 DaFeist");
         	}
         }
         

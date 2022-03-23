@@ -1,40 +1,40 @@
      package de.dafeist.ucaddons;
-     
-     import java.io.File;
-     import net.minecraftforge.common.MinecraftForge;
-     import net.minecraftforge.common.config.Configuration;
-     import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-     import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-     
-     public class ConfigHandler
-     {
-       public static Configuration config;
-       
-       public ConfigHandler(File configFile) {
-       MinecraftForge.EVENT_BUS.register(this);
-       config = UCAddons.config;
-       config.load();
-       redefineConfigs();
-       }
-       
-       public static void redefineConfigs() {
-      if (config.hasChanged())
-         config.save(); 
-       }
-       
-       @SubscribeEvent
-       public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-       if (event.getModID().equalsIgnoreCase("ucaddons"))
-         redefineConfigs(); 
-       }
-       public static void init(Configuration config) {
-       config.load();
-       config.getBoolean("showHKasse", "house", false, "Zeigt die HKasse an wenn ein Haus registriert ist");
-       config.getBoolean("showDrugLager", "house", false, "Zeigt das DrugLager an wenn ein Haus registriert ist");
-       config.getBoolean("cordChecker", "house", false, "Nur aktivieren wenn du showHKasse oder showDrugLager brauchst");
-       config.getBoolean("AltF4Command", "Fun", false, "Crasht das Game sofort wenn man den Command ausfuehrt");
-       
-         
-       config.save();
-       }
-     }
+
+import de.dafeist.ucaddons.utils.Logger;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+	 @Config(modid = UCAddons.MODID, name = UCAddons.NAME)
+	 @Mod.EventBusSubscriber
+     public class ConfigHandler {
+    	 
+		 @Config.Name("showHKasse")
+		 @Config.Comment("Zeigt die HKasse an wenn ein Haus registriert ist")
+		 public static boolean showHKasse = false;
+		 
+		 @Config.Name("showDrugLager")
+		 @Config.Comment("Zeigt das DrugLager an wenn ein Haus registriert ist")
+		 public static boolean showDrugLager = false;
+		 
+		 @Config.Name("cordChecker")
+		 @Config.Comment("Nur aktivieren wenn du showHKasse oder showDrugLager brauchst")
+		 public static boolean cordChecker = false;
+		 
+		 @Config.Name("AltF4Command")
+		 @Config.Comment("Crasht das Game sofort wenn man den Command ausfuehrt")
+		 public static boolean AltF4Command = false;
+		 
+		 @Config.Name("AnzeigeViolett")
+		 @Config.Comment("Hiermit wird die Farbe der Anzeige zu Violett gesetzt")
+		 public static boolean PurpleGUI = false;
+		 
+		    @SubscribeEvent
+		    public static void onConfigChange(ConfigChangedEvent event) {
+		    	Logger.LOGGER.info("Detected Config change, reloading...");
+		    	ConfigManager.sync(UCAddons.MODID, Config.Type.INSTANCE);
+     		}
+	 }
+		  

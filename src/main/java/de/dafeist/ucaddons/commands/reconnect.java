@@ -41,7 +41,7 @@ import net.minecraft.client.Minecraft;
        ServerData SVD = Minecraft.getMinecraft().getCurrentServerData();
        if (Minecraft.getMinecraft().isSingleplayer()) {
     	   
-         (Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " Reconnect funktioniert nur im Multiplayer-Modus"));
+         Minecraft.getMinecraft().player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " Reconnect funktioniert nur im Multiplayer-Modus"));
          } else {
          Minecraft.getMinecraft().displayGuiScreen((GuiScreen)new GuiConnecting((GuiScreen)new GuiMainMenu(), Minecraft.getMinecraft(), SVD));
          Logger.LOGGER.info("Reconnected the current Server");

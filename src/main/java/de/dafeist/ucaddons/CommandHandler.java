@@ -1,11 +1,10 @@
      package de.dafeist.ucaddons;
      
-     import de.dafeist.ucaddons.commands.SupportUCAddons;
+import de.dafeist.ucaddons.commands.SupportUCAddons;
 import de.dafeist.ucaddons.commands.altf4;
 import de.dafeist.ucaddons.commands.cpconnect;
 import de.dafeist.ucaddons.commands.cpconnectinfo;
 import de.dafeist.ucaddons.commands.geknebelt;
-import de.dafeist.ucaddons.commands.grreinf;
 import de.dafeist.ucaddons.commands.medicaktis;
 import de.dafeist.ucaddons.commands.medicaktitabelle;
 import de.dafeist.ucaddons.commands.reconnect;
@@ -16,8 +15,7 @@ import de.dafeist.ucaddons.commands.togglefbiorcop;
 import de.dafeist.ucaddons.commands.ucaddonsdiscord;
 import de.dafeist.ucaddons.commands.ucaddonsinfo;
 import net.minecraft.command.ICommand;
-     import net.minecraftforge.client.ClientCommandHandler;
-     import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.client.ClientCommandHandler;
      
      public class CommandHandler {
        public static void init() {
@@ -35,10 +33,12 @@ import net.minecraft.command.ICommand;
        ClientCommandHandler.instance.registerCommand((ICommand)new geknebelt());
        ClientCommandHandler.instance.registerCommand((ICommand)new medicaktis());
        ClientCommandHandler.instance.registerCommand((ICommand)new medicaktitabelle());
+       //ClientCommandHandler.instance.registerCommand((ICommand)new ulink());
+       //ClientCommandHandler.instance.registerCommand((ICommand)new ulogin());
          
-       Configuration config = UCAddons.config;
-       config.load();
-       if (config.getBoolean("AltF4Command", "Fun", false, "Crasht das Game sofort wenn man den Command ausfuehrt") == true)
+       if (ConfigHandler.AltF4Command == true) {
          ClientCommandHandler.instance.registerCommand((ICommand)new altf4()); 
+         
+       }
        }
      }

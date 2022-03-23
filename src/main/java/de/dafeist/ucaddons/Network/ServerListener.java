@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
        public void run() {
          try {
          Logger.LOGGER.info("Connecting to the UCAddons Server");
-         Socket client = new Socket("178.18.248.173", 1001);
+         Socket client = new Socket("45.81.235.216", 1001);
          DataOutputStream out = new DataOutputStream(client.getOutputStream());
          out.writeUTF("L: " + (Minecraft.getMinecraft()).player.getUniqueID() + " " + (Minecraft.getMinecraft()).player.getDisplayNameString() + UCAddons.VERSION);
          out.flush();

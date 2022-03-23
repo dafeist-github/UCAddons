@@ -26,7 +26,7 @@ public class UCAddonsUpdater {
 
 	public static void update() throws MalformedURLException, IOException, KeyManagementException, NoSuchAlgorithmException {
 	    if(!SystemUtils.IS_OS_WINDOWS) {
-	    	(Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " UCAddons kann nur mit Windows automatisch updated werden, bitte lade das Update manuell unter https://feist2007.de/downloads/UCAddons.jar herunter!"));
+	    	(Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + " UCAddons kann nur mit Windows automatisch updated werden, bitte lade das Update manuell unter https:/dafeist.de/downloads/UCAddons.jar herunter!"));
 	    	return;
 	    }
 	    downloadFileFromURL("https://dafeist.de/downloads/UCAddons.jar", UPDATE_FILE.getAbsolutePath());
@@ -38,6 +38,7 @@ public class UCAddonsUpdater {
 				}
 
         }));
+	    
 	}
 
     private static void overwriteJar() throws IOException {

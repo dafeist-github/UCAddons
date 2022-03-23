@@ -1,3 +1,5 @@
+src/main/java/org/
+
 # eclipse
 bin
 *.launch
@@ -23,3 +25,9 @@ run
 
 # Files from Forge MDK
 forge*changelog.txt
+LICENSE-Paulscode IBXM Library.txt
+LICENSE-Paulscode SoundSystem CodecIBXM.txt
+CREDITS.txt
+src/main/java/de/dafeist/ucaddons/utils/CryptoUtils.java
+src/main/java/de/dafeist/ucaddons/commands/ulink.java
+src/main/java/de/dafeist/ucaddons/commands/ulogin.java
