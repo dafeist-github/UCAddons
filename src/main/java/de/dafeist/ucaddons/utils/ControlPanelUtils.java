@@ -29,7 +29,7 @@ import com.google.gson.stream.JsonToken;
 import net.minecraft.client.Minecraft;
 
 public class ControlPanelUtils {
-	public static String key = "ezeon8547"; 
+	public static String key = "[PRIVATE]"; 
     static File dir = new File((Minecraft.getMinecraft()).mcDataDir + "\\UCAddons");
     static File file = new File((Minecraft.getMinecraft()).mcDataDir + "\\UCAddons\\CP.json");
     static Path dirPath = Paths.get((Minecraft.getMinecraft()).mcDataDir + "\\UCAddons", new String[0]);
