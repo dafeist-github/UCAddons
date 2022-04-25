@@ -1,16 +1,11 @@
 package de.dafeist.ucaddons;
      
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
 
-import org.apache.commons.io.FileUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
-import com.google.gson.Gson;
 
 import de.dafeist.ucaddons.Network.ServerListener;
 import de.dafeist.ucaddons.Thread.POSChecker;
@@ -21,13 +16,10 @@ import de.dafeist.ucaddons.utils.UCAddonsUpdater;
 import de.dafeist.ucaddons.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.tutorial.TutorialSteps;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -65,46 +57,58 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
         @SubscribeEvent
         public void onServerLoginEvent(EntityJoinWorldEvent event) {
             if (UCAddons.FirstServerJoin == true) {
+                UCAddons.FirstServerJoin = false;
  	        Logger.LOGGER.info("Checking for Updates...");
- 	        try {
- 				 Logger.LOGGER.info("Searching for UCAddons Updates...");
- 				 final String USER_AGENT = "Mozilla/5.0";
- 				 System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
- 				 Connection.Response Page = Jsoup.connect("https://dafeist.de/UCAddonsVersionCheck.php")
- 						 .sslSocketFactory(CertFix.socketFactory())
- 						 .ignoreHttpErrors(true)
- 				         .method(Connection.Method.POST)  
- 				         .userAgent(USER_AGENT)  
- 				         .execute(); 
- 				Document html = Page.parse();
- 				String latestVersionString = html.selectFirst("body").parent().children().text();
- 				String currentVersionString = UCAddons.VERSION;
- 				latestVersionString = latestVersionString.replace(".", "");
- 				currentVersionString = currentVersionString.replace(".", "");
- 				int latestVersion = Integer.parseInt(latestVersionString);
- 				int currentVersion = Integer.parseInt(currentVersionString);
- 				if(latestVersion > currentVersion) {
- 					Logger.LOGGER.info("UCAddons Update found, downloading Update...");
- 					Connection.Response Page2 = Jsoup.connect("https://dafeist.de/ucaddonschangelog.php")
-							 .sslSocketFactory(CertFix.socketFactory())
-	 						 .ignoreHttpErrors(true)
-	 				         .method(Connection.Method.POST)  
-	 				         .userAgent(USER_AGENT)  
-	 				         .execute(); 
-	 				Document html2 = Page2.parse();
-	 				String changelog = html2.text();
-					(Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + changelog));
- 					UCAddonsUpdater.update();
- 					Utils.lockUpdater = true;
- 				} else {
- 					Logger.LOGGER.info("UCAddons is already up to date, latest version: " + latestVersionString);
- 				}
- 	       } catch(Exception e) {
- 	    	   e.printStackTrace();
- 	       }
+	        	if(!Utils.lockUpdater) {
+	        		Thread t1 = new Thread(new Runnable() {
+	        		    @Override
+	        		    public void run() {
+	        	 	        try {
+	        	 				 Logger.LOGGER.info("Searching for UCAddons Updates...");
+	        	 				 final String USER_AGENT = "Mozilla/5.0";
+	        	 				 System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+	        	 				 Connection.Response Page = Jsoup.connect("https://dafeist.de/UCAddonsVersionCheck.php")
+	        	 						 .sslSocketFactory(CertFix.socketFactory())
+	        	 						 .ignoreHttpErrors(true)
+	        	 				         .method(Connection.Method.POST)  
+	        	 				         .userAgent(USER_AGENT)  
+	        	 				         .execute(); 
+	        	 				Document html = Page.parse();
+	        	 				String latestVersionString = html.selectFirst("body").parent().children().text();
+	        	 				String currentVersionString = UCAddons.VERSION;
+	        	 				latestVersionString = latestVersionString.replace(".", "");
+	        	 				currentVersionString = currentVersionString.replace(".", "");
+	        	 				int latestVersion = Integer.parseInt(latestVersionString);
+	        	 				int currentVersion = Integer.parseInt(currentVersionString);
+	        	 				if(latestVersion > currentVersion) {
+	        	 					Logger.LOGGER.info("UCAddons Update found, downloading Update...");
+	        	 					Connection.Response Page2 = Jsoup.connect("https://dafeist.de/ucaddonschangelog.php")
+	        								 .sslSocketFactory(CertFix.socketFactory())
+	        		 						 .ignoreHttpErrors(true)
+	        		 				         .method(Connection.Method.POST)  
+	        		 				         .userAgent(USER_AGENT)  
+	        		 				         .execute(); 
+	        		 				Document html2 = Page2.parse();
+	        		 				String changelog = html2.text();
+	        						(Minecraft.getMinecraft()).player.sendMessage((ITextComponent)new TextComponentString(Utils.prefix + changelog));
+	        	 					UCAddonsUpdater.update();
+	        	 					Utils.lockUpdater = true;
+	        	 					return;
+	        	 				} else {
+	        	 					Logger.LOGGER.info("UCAddons is already up to date, latest version: " + latestVersionString);
+	        	 					return;
+	        	 				}
+	        	 	       } catch(Exception e) {
+	        	 	    	   e.printStackTrace();
+	        	 	    	   return;
+	        	 	       }
+	        		    }
+	        		});  
+	        		t1.start();
+	        		}
+ 	        }
  				
         	try {
-               UCAddons.FirstServerJoin = false;
 	         ServerListener serverListener = new ServerListener();
 	 	        serverListener.start();
  	     Minecraft.getMinecraft().getTutorial().setStep(TutorialSteps.NONE);
@@ -130,7 +134,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 	        	e.printStackTrace();
 	        }
             }
-        }
+           
         
         
         @SubscribeEvent
@@ -139,6 +143,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
         		//event.setDisplayname("§6[§4UCAddons§6]§2 DaFeist");
         	}
         }
-        
+        public boolean isURL(String url) {
+        	  try {
+        	     URL u = new URL(url);
+        	     u.toURI();
+        	     return true;
+        	  } catch (Exception ex) { }
+        	  return false;
+        	} 
       }
+      
+      
 
