@@ -38,7 +38,7 @@ import net.minecraft.client.Minecraft;
          client.close();
        } catch (UnknownHostException e) {
          Logger.LOGGER.warn("Couldnt connect to the UCAddons Server: Unknown Host");
-       } catch (IOException e) {
+       } catch (Exception e) {
     	 Logger.LOGGER.warn("Couldnt connect to the UCAddons Server: IOException");
        }
        }
