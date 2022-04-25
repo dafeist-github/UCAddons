@@ -19,9 +19,10 @@ public class CryptoUtils
     Cipher ecipher;
     Cipher dcipher;
     byte[] salt = {
-        [PRIVATE]
+        (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32,
+        (byte) 0x56, (byte) 0x35, (byte) 0xE3, (byte) 0x03
     };
-    int iterationCount = [PRIVATE];
+    int iterationCount = 19;
 
     public CryptoUtils() {
 
