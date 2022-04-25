@@ -20,7 +20,7 @@ import net.minecraft.client.Minecraft;
          DataOutputStream out = new DataOutputStream(client.getOutputStream());
          out.writeUTF("L: " + (Minecraft.getMinecraft()).player.getUniqueID() + " " + (Minecraft.getMinecraft()).player.getDisplayNameString() + UCAddons.VERSION);
          out.flush();
-           while (true) {
+           /*while (true) {
            Thread.sleep(800L);
            DataInputStream in = new DataInputStream(client.getInputStream());
            if (in.read() == -1) {
@@ -33,13 +33,13 @@ import net.minecraft.client.Minecraft;
            in.close();
            out.close();
            client.close();
-           } 
+           }*/
+         out.close();
+         client.close();
        } catch (UnknownHostException e) {
          Logger.LOGGER.warn("Couldnt connect to the UCAddons Server: Unknown Host");
        } catch (IOException e) {
     	 Logger.LOGGER.warn("Couldnt connect to the UCAddons Server: IOException");
-       } catch (InterruptedException e) {
-    	 Logger.LOGGER.warn("Couldnt connect to the UCAddons Server: InterruptedException");
-         } 
+       }
        }
      }

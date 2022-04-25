@@ -31,3 +31,7 @@ CREDITS.txt
 src/main/java/de/dafeist/ucaddons/utils/CryptoUtils.java
 src/main/java/de/dafeist/ucaddons/commands/ulink.java
 src/main/java/de/dafeist/ucaddons/commands/ulogin.java
+src/main/java/de/dafeist/ucaddons/utils/ControlPanelUtils.java
+src/main/java/de/dafeist/ucaddons/utils/CryptoUtils.java
+src/main/java/de/dafeist/ucaddons/utils/ControlPanelUtils.java
+src/main/java/de/dafeist/ucaddons/utils/CryptoUtils.java
